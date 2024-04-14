@@ -1,23 +1,29 @@
-const express=require('express');  //to create the server with the help of express
+const express=require('express'); 
+const dbConnect=require('./config/database');//to create the server with the help of express
+const todosRoutes=require("./routes/todos");
 const app=express();
 
 
-const PORT=process.env.PORT || 4000;
-app.listen(PORT,()=>{
-    console.log(`The server is running on port ${PORT}`);   /// listen the port 3000
-});
 
-//middleware for parse the data in body-parse to json formate
+const PORT=process.env.PORT || 4000;
+
+
+//middleware for parsing the data in body-parse to JSON format
 app.use(express.json());
 
 //import routes for todo API
 
-const todosRoutes=require("./routes/todos");
+dbConnect();
+
+
 //mount the API routes 
 app.use("/api/v1",todosRoutes);
 
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
 
-//db connection
+app.listen(PORT,()=>{
+    console.log(`The server is running on port ${PORT}`);   /// listen the port 3000
+});
 
-const dbConnect=require('./config/database');
-dbConnect();
